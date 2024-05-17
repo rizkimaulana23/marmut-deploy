@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+        background-color: black;
+        color: white;
+    }
+    #title{
+        margin-top:20px;
+        text-align: center;
+        font-weight: 1000;
+        color:#F5743B;
+    }
+    #data-playlist{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+        gap: 15px;
+        padding: 10px;
+        text-align: left;
+    }
+    #tempat-button{
+        text-align: center;
+    }
+    #list-song{
+        overflow-y: auto;
+        height: 40vh;
+    }
+    #daftar-lagu{
+        overflow: hidden; 
+        margin-bottom:20px;
+    }
+    #outer-container{
+        padding: 0 20vw 0 20vw;
+        margin-bottom: 30px;
+    }
+    .row{
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border: 1px solid black;
+    }
+    #list-song div{
+        text-align: center;
+    }
+    #header-list-playlist div {
+        text-align: center;
+    }
+    #tambah-playlist{
+        text-align: center;
+    }
+    .row{
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border: 1px solid white;
+    }
+    #title-daftar-lagu{
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-weight: 1000;
+    }
+    #navbar-header{
+      background-color: #57504D;
+    }
+    .btn {
+      border-color: #F5743B;
+      background-color: #F5743B;
+    }
+    #modal-tambah-playlist div{
+        color: black;
+    }
+    
+</style>
+
+<div class="container-fluid" id="outer-container">
+    <div class="container-fluid" id="title">
+        <h1>USER PLAYLIST DETAIL</h1>
+    </div>
+    <div class="grid-container" id="data-playlist">
+        <div>Judul</div>            <div>{{ playlist.judul }}</div>
+        <div>Pembuat</div>          <div>{{ playlist.nama_pembuat }}</div>
+        <div>Jumlah Lagu</div>      <div>{{ playlist.jumlah_lagu }}</div>
+        <div>Total Durasi</div>     <div>{{ playlist.total_durasi }}</div>
+        <div>Tanggal Dibuat</div>   <div>{{ playlist.tanggal_dibuat }}</div>
+        <div>Deskripsi</div>        <div>{{ playlist.deskripsi }}</div>
+    </div>
+
+    <div class="container-fluid" id="tempat-button">
+        <button class="btn btn-primary" onclick="history.back()">Kembali</button>
+        <button class="btn btn-primary btn-shuffle-play" 
+            data-playlist-id = "{{ playlist.playlist_id }}"
+            data-email-pembuat = "{{ playlist.email_pembuat }}">Shuffle Play</button>
+    </div>
+
+    <div class="container-fluid" style="text-align: center;" id="title-daftar-lagu">
+        <h2>Daftar Lagu</h2>
+    </div>
+
+    <div class="container-fluid" id="daftar-lagu">
+        <nav id="navbar-header" class="navbar px-3 mb-3">
+            <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+            <div class="container-fluid" id="header-list-playlist">
+                <div class="col-4">Judul Lagu</div>
+                <div class="col-2">Oleh</div>
+                <div class="col-2">Durasi</div>
+                <div class="col-4">Action</div>
+            </div>
+        </nav>
+        <div id="list-song" class="container-fluid">
+          {% for song in songs %}
+            <div class="row align-items-start">
+                <div class="col-4">
+                  {{ song.judul }}
+                </div>
+                <div class="col-2">
+                  {{ song.durasi }}
+                </div>
+                <div class="col-2">
+                  {{ song.nama_artist }}
+                </div>
+                <div class="col-4">
+                    <div class="container-fluid">
+                        <a href="{% url 'play_song:play_song' song.id_konten %}" class="btn btn-primary">Lihat</a>
+                        <button class="btn btn-primary btn-play" data-song-id="{{ song.id_konten }}">Play</button>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+        </div>
+    </div>
+
+  {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                {% if message.level_tag == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.level_tag == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% else %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    function changeValue(newValue) {
+      // Update the button text to the selected value
+      $('#dropdownMenuButton').text(newValue);
+    }
+
+    $(document).ready(function() {
+      $('.btn-play').click(function() {
+          var songId = $(this).data('song-id');  // Assuming you pass song ID
+          $.ajax({
+              url: '{% url "kelola_playlist:play_song_ajax" %}',
+              type: 'POST',
+              data: {
+                  'song_id': songId,
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success: function(response) {
+                  if(response.success) {
+                      alert(response.message);  // Show success message in a popup
+                  } else {
+                      alert('Error: ' + response.message);  // Show error message
+                  }
+              }
+          });
+      });
+  });
+
+     $(document).ready(function() {
+      $('.btn-shuffle-play').click(function() {
+          var playlistId = $(this).data('playlist-id');  // Assuming you pass song ID
+          var emailPembuat = $(this).data('email-pembuat');  // Assuming you pass song ID
+          $.ajax({
+              url: '{% url "kelola_playlist:shuffle_playlist_ajax" %}',
+              type: 'POST',
+              data: {
+                  'playlist_id': playlistId,
+                  'email_pembuat': emailPembuat,
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success: function(response) {
+                  if(response.success) {
+                      alert(response.message);  // Show success message in a popup
+                  } else {
+                      alert('Error: ' + response.message);  // Show error message
+                  }
+              }
+          });
+      });
+  });
+  </script>
+{% endblock content%}

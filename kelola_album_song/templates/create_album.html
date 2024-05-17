@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Album</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(180deg, #57504D 0%, #171715 100%);
+                color: #FFF;
+                padding: 20px;
+            }
+            /* .form-container {
+                background: rgba(0, 0, 0, 0.7);
+                padding: 20px;
+                border-radius: 8px;
+            } */
+            .form-container h2, .form-container h3 {
+                color: #F5743B;
+            }
+            .form-container label {
+                font-weight: bold;
+            }
+            .form-container select, .form-container input {
+                margin-bottom: 15px;
+            }
+            .form-container button {
+                background-color: #F5743B;
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+            }
+            .form-container button:hover {
+                background-color: #D45A2C;
+            }
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                background-color: #fff;
+                color: #000;
+                font-weight: bold;
+            }
+            .select2-container--default .select2-results > .select2-results__options {
+                color: #000;
+            }
+            .select2-container .select2-selection--single .select2-selection__rendered {
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container form-container">
+            <h2>Create Album</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="judul_album" class="form-label">Judul Album:</label>
+                    <input type="text" id="judul_album" name="judul_album" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="label" class="form-label">Label:</label>
+                    <select id="label" name="label" class="form-select">
+                        {% for label in labels %}
+                        <option value="{{ label.id }}">{{ label.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <h3>Lagu Pertama</h3>
+                <div class="mb-3">
+                    <label for="judul_lagu" class="form-label">Judul Lagu:</label>
+                    <input type="text" id="judul_lagu" name="judul_lagu" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="artist" class="form-label">Artist:</label>
+                    <select id="artist" name="artist" class="form-select">
+                        {% for artist in artists %}
+                        <option value="{{ artist.id }}">{{ artist.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="songwriter" class="form-label">Songwriter:</label>
+                    <select id="songwriter" name="songwriter" class="form-select" multiple>
+                        {% for songwriter in songwriters %}
+                        <option value="{{ songwriter.id }}">{{ songwriter.nama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="genre" class="form-label">Genre:</label>
+                    <select id="genre" name="genre" class="form-select" multiple>
+                        {% for genre in genres %}
+                        <option value="{{ genre.genre }}">{{ genre.genre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="durasi" class="form-label">Durasi:</label>
+                    <input type="text" id="durasi" name="durasi" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#songwriter').select2();
+                $('#genre').select2();
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+{% endblock content%}

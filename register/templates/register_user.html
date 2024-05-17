@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register User</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            width: 100%; 
+            height: 100%; /* Use 100% of the viewport height */
+            position: relative; /* Change from fixed to relative */
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #57504D 0%, #171715 100%);
+            overflow-y: auto; /* Allow vertical scrolling */
+            color: rgb(40, 36, 36);
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-container {
+            width: 100%; /* Full width of the body */
+            display: flex;
+            justify-content: center; /* Center form horizontally */
+            align-items: center; /* Center form vertically */
+            padding: 50px 0; /* Add padding top and bottom */
+        }
+        .input-group {
+            width: 451px; /* Fixed width for inputs */
+            margin-bottom: 20px; /* Space between input groups */
+        }
+        .input-box {
+            padding: 10px 14px;
+            background: white;
+            box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+            border-radius: 8px;
+            border: 1px solid #D0D5DD;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        input[type="text"], input[type="password"], input[type="date"], select {
+            width: 100%; /* Full width of the input box */
+            background: none;
+            border: none;
+            outline: none;
+            color: #667085;
+            font-size: 16px;
+        }
+        button {
+            width: 451px;
+            height: 50px;
+            background: #F5743B;
+            border-radius: 12px;
+            color: #FAFAFA;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px; /* Margin top for button */
+        }
+
+        label {
+            color: #FAFAFA;
+            font-style: bold;
+        }
+
+        .title {
+            color: #FAFAFA; /* Light color for visibility */
+            font-size: 32px;
+            font-weight: 700; /* Bold weight */
+            margin-bottom: 2px; /* Spacing between title and form */
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Register Form</div>
+    <div class="form-container">
+        <form action="{% url 'register:register_user' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>Email</label>
+                <div class="input-box">
+                    <input type="text" name="email" placeholder="Enter your email here" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="Enter your password here" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Nama</label>
+                <div class="input-box">
+                    <input type="text" name="nama" placeholder="Enter your name" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Tempat Lahir</label>
+                <div class="input-box">
+                    <input type="text" name="tempat_lahir" placeholder="Enter your birthplace" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Tanggal Lahir</label>
+                <div class="input-box">
+                    <input type="date" name="tanggal_lahir" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Kota Asal</label>
+                <div class="input-box">
+                    <input type="text" name="kota_asal" placeholder="Enter your hometown" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Gender</label>
+                <div class="input-box">
+                    <select name="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Role</label>
+                <div class="input-box">
+                    <input type="radio" name="role" value="podcaster" required> Podcaster
+                    <input type="radio" name="role" value="artist" required> Artist
+                    <input type="radio" name="role" value="songwriter" required> Songwriter
+                </div>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock content%}

@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<head> 
+    <style>
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+        }
+      
+        .login-container {
+          background: linear-gradient(180deg, #57504d -45.46%, #171715 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          color: #fff;
+          /* line-height: 150%; */
+          /* padding: 80px 60px; */
+          min-height: 100%;
+        }
+      
+        @media (max-width: 991px) {
+          .login-container {
+            padding: 0 20px;
+          }
+        }
+      
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          width: 451px;
+          max-width: 100%;
+        }
+      
+        @media (max-width: 991px) {
+          .login-form {
+            margin-top: 40px;
+          }
+        }
+      
+        .login-title {
+          text-align: center;
+          font-feature-settings: "clig" off, "liga" off;
+          letter-spacing: 0.8px;
+          align-self: center;
+          font: 700 32px/120% Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+        }
+      
+        .email-label {
+          margin-top: 35px;
+          font: 500 20px/100% Poppins, sans-serif;
+        }
+      
+        @media (max-width: 991px) {
+          .email-label {
+            max-width: 100%;
+          }
+        }
+      
+        .email-input {
+          font-family: Poppins, sans-serif;
+          border-radius: 8px;
+          box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+          border: 1px solid rgba(208, 213, 221, 1);
+          background-color: var(--White, #fff);
+          margin-top: 6px;
+          color: var(--Gray-500, #667085);
+          font-weight: 400;
+          padding: 10px 14px;
+        }
+      
+        @media (max-width: 991px) {
+          .email-input {
+            max-width: 100%;
+          }
+        }
+      
+        .password-label {
+          margin-top: 42px;
+          font: 500 20px/100% Poppins, sans-serif;
+        }
+      
+        @media (max-width: 991px) {
+          .password-label {
+            max-width: 100%;
+            margin-top: 40px;
+          }
+        }
+      
+        .password-input {
+          font-family: Poppins, sans-serif;
+          border-radius: 8px;
+          box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+          border: 1px solid rgba(208, 213, 221, 1);
+          background-color: var(--White, #fff);
+          margin-top: 6px;
+          color: var(--Gray-500, #667085);
+          font-weight: 400;
+          padding: 10px 14px;
+        }
+      
+        @media (max-width: 991px) {
+          .password-input {
+            max-width: 100%;
+          }
+        }
+      
+        .login-button {
+          font-feature-settings: "clig" off, "liga" off;
+          font-family: Poppins, sans-serif;
+          justify-content: center;
+          align-items: center;
+          border-radius: 12px;
+          background-color: #f5743b;
+          margin-top: 42px;
+          color: var(--White-50, #fafafa);
+          font-weight: 700;
+          text-align: center;
+          letter-spacing: 0.4px;
+          padding: 8px 32px;
+          border: none;
+          cursor: pointer;
+        }
+      
+        @media (max-width: 991px) {
+          .login-button {
+            max-width: 100%;
+            margin-top: 40px;
+            padding: 0 20px;
+          }
+        }
+      
+        .register-link {
+          text-align: center;
+          font-feature-settings: "clig" off, "liga" off;
+          letter-spacing: 0.35px;
+          text-decoration: underline;
+          align-self: center;
+          margin-top: 26px;
+          font: 600 14px/24px Poppins, sans-serif;
+        }
+      </style>
+</head>
+{% block content %}
+<body>
+    <main class="login-container">
+        <form class="login-form" method="POST">
+          {% csrf_token %}
+          <h1 class="login-title">Log In</h1>
+          <label for="email" class="email-label">Email</label>
+          <input type="email" id="email" name="email" class="email-input">
+          <label for="password" class="password-label">Password</label>
+          <input type="password" id="password" name="password" class="password-input">
+          <button type="submit" class="login-button">Log In</button>
+          <p class="register-link">
+            Don't have an account? <a href="#">Register</a>
+          </p>
+        </form>
+      </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal -->
+   <p>
+    {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+   </p>
+</body>
+{% endblock content %}

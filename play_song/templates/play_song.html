@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body{
+            font-family: 'Poppins', sans-serif;
+            background-color: black;
+            color: white;
+        }
+    #outer-container{
+            padding: 0 20vw 0 20vw;
+            margin-bottom: 30px;
+        }
+    .title-play-song{
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .grid-container{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        padding: 10px;
+    }
+    .grid-container-add{
+        display: grid;
+        grid-template-columns: 1fr 6fr;
+        gap: 15px;
+        padding: 10px;
+    }
+    .grid-container > div {
+        background-color: #57504D;
+        padding: 10px;
+        border-radius: 16px;
+        color: white;
+    }
+    .grid-container-inside{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+
+    .grid-container-inside > div {
+      padding: 8px 5px 8px 5px;
+    }
+    body {
+        background-color: black;
+    }
+    .title-play-song {
+        color: #F5743B;
+    }
+    .slider {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    /* Styles for the range input */
+    input[type="range"] {
+        width: 60%; /* Adjusts the length of the slider */
+    }
+
+    #myinput {
+        background: linear-gradient(to right, #F5743B 0%, #F5743B 50%, #EAECF0 50%, #EAECF0 100%);
+        border-radius: 8px;
+        height: 7px;
+        width: 356px;
+        outline: none;
+        transition: background 450ms ease-in;
+        -webkit-appearance: none;
+    }
+    .outer-container btn {
+        background-color: #F5743B;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        margin: 10px 0;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 5px;
+        display: block;
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    #metadata-lagu {
+        padding: 10px 0px 10px 0px;
+        margin-bottom: 15px;
+    }
+    .modal div{
+      color:black;
+    }
+    #metadata-add{
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid gray;
+      border-radius: 10px;
+    }
+    .button-action .btn{
+        background-color: #F5743B;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        margin: 10px 0;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 5px;
+        display: block;
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<div class="container-fluid" id="outer-container">
+    <div class="title-play-song container-fluid">
+      <h1>Song Detail</h1>
+  </div>
+  <div class="grid-container" id="metadata-lagu">
+      <div class="grid-container-inside">
+          <div>Judul</div>
+          <div>{{ data.judul }}</div>
+          <div>{{navbar.premium_status}}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Tanggal Rilis</div>
+          <div>{{ data.tanggal_rilis }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Genre(s)</div>
+          <div>{{ data.genre }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Tahun</div>
+          <div>{{ data.tahun }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Artist</div>
+          <div>{{ data.artist}}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Total Play</div>
+          <div>{{ data.total_play }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Songwriter(s)</div>
+          <div>{{ data.songwriter }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Total Downloads</div>
+          <div>{{ data.total_download }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Durasi</div>
+          <div>{{ data.durasi }}</div>
+      </div>
+      <div class="grid-container-inside">
+          <div>Album</div>
+          <div>{{ data.album }}</div>
+      </div>
+  </div>
+  
+  <div class="slider container-fluid">
+      <input id="myinput" min="0" max="60" type="range" value="30" />
+  </div>
+
+  <div class="button-bottom container-fluid button-action">
+      <button class="btn btn-play" data-song-id="{{ data.id_song }}">Play</button>
+      <button class="btn" type='button' data-bs-toggle="modal" data-bs-target="#modalTambahPlaylist">Add to Playlist</button>
+      <button class="btn btn-download" data-song-id="{{ data.id_song }}">Download</button>
+      <button class="btn" onclick="history.back()">Kembali</button>
+  </div>
+  </div>
+  
+<!-- Modal Tambah Playlist -->
+<div class="modal fade" id="modalTambahPlaylist" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Song to User Playlist</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="addSongToPlaylistForm">
+              {% csrf_token %}
+              <input type="hidden" name="song_id" value="{{ data.id_song }}">
+              <div class="modal-body">
+                  <div class="grid-container-add" id="metadata-add">
+                      <div>Judul: </div>
+                      <div>{{ data.judul }}</div>
+                      <div>Artist: </div>
+                      <div>{{ data.artist }}</div>
+                  </div>
+                  <div class="dropdown">
+                      <select class="form-select" name="playlist_id" id="validationCustom04" required>
+                          <option selected disabled value="">Select playlist...</option>
+                          {% for playlist in data.playlists %}
+                              <option value="{{ playlist.id_playlist }}">{{ playlist.judul_playlist }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
+                  <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+
+<!-- Modal Success -->
+<div class="modal fade" id="modalSuccess" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body">
+              Song successfully added to playlist!
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="successPlaylistButton">Open Playlist</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal Error -->
+<div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body">
+              Error adding song to playlist.
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="errorPlaylistButton">Open Playlist</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal Success for Download -->
+<div class="modal fade" id="modalSuccessDownload" tabindex="-1" aria-labelledby="successDownloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                Song successfully downloaded!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="successDownloadButton">Open Downloads</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Error for Download -->
+<div class="modal fade" id="modalErrorDownload" tabindex="-1" aria-labelledby="errorDownloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                Error downloading song.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="django-messages" style="display: none;">
+      {% for message in messages %}
+      <div data-level="{{ message.tags }}" data-message="{{ message }}"></div>
+      {% endfor %}
+  </div>
+  
+  <!-- Script for the range input -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+      document.getElementById("myinput").oninput = function() {
+      var value = (this.value-this.min)/(this.max-this.min)*100
+      this.style.background = 'linear-gradient(to right, #F5743B 0%, #F5743B ' + value + '%, #EAECF0 ' + value + '%, #EAECF0 100%)'
+      };
+
+      $(document).ready(function() {
+    // Get the slider element and the play button
+    var slider = $('#myinput');
+
+    $('.btn-play').click(function(event) {
+            var songId = $(this).data('song-id'); // Assuming you pass song ID
+            var sliderValue = parseInt(slider.val(), 10); // Get the current value of the slider
+
+            // Check if the slider's value is at least 42
+            if (sliderValue < 42) {
+                event.preventDefault(); // Prevent the AJAX call
+                // alert('The slider value must be at least 42 to play the song.');
+            } else {
+                // If the slider value is 42 or more, perform the AJAX call to play the song
+                $.ajax({
+                    url: '{% url "kelola_playlist:play_song_ajax" %}',
+                    type: 'POST',
+                    data: {
+                        'song_id': songId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message); // Show success message in a popup
+                        } else {
+                            alert('Error: ' + response.message); // Show error message
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('.btn-download').click(function() {
+            var songId = $(this).data('song-id');
+            $.ajax({
+                url: '{% url "play_song:download_song_ajax" %}',
+                type: 'POST',
+                data: {
+                    'song_id': songId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                dataType: 'json', // Expecting a JSON response
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#modalSuccessDownload').modal('show');
+                        // Dynamically set the link for the 'Open Downloads' button
+                        $('#successDownloadButton').attr("onclick", "window.location.href='{% url 'login:login' %}'");
+                    } else {
+                        $('#modalErrorDownload').modal('show');
+                    }
+                },
+                error: function() {
+                    $('#modalErrorDownload').modal('show');
+                }
+            });
+        });
+    });
+
+
+    //   $(document).ready(function() {
+    //       $('.btn-download').click(function() {
+    //           var songId = $(this).data('song-id');  // Assuming you pass song ID
+    //           $.ajax({
+    //               url: '{% url "play_song:download_song_ajax" %}',
+    //               type: 'POST',
+    //               data: {
+    //                   'song_id': songId,
+    //                   csrfmiddlewaretoken: '{{ csrf_token }}'
+    //               },
+    //               success: function(response) {
+    //                   if(response.success) {
+    //                       alert(response.message);  // Show success message in a popup
+    //                   } else {
+    //                       alert(response.message);  // Show error message
+    //                   }
+    //               }
+    //           });
+    //       });
+    //   });
+
+//       $(document).ready(function() {
+//     $('#addSongToPlaylistForm').submit(function(e) {
+//         e.preventDefault();
+//         var formData = $(this).serialize();
+//         var playlistId = $('#validationCustom04').val(); // Get the selected playlist ID
+
+//         console.log("Playlist ID: ", playlistId); // Debug: Output Playlist ID to console
+
+//         $.ajax({
+//             type: "POST",
+//             url: "{% url 'play_song:add_song_to_playlist' %}",
+//             data: formData,
+//             success: function(response) {
+//                 $('#modalTambahPlaylist').modal('hide');
+//                 $('#modalSuccess').modal('show');
+//                 // Set the onclick attribute for the success modal
+//                 var successUrl = "{% url 'kelola_playlist:playlist_detail' 0 %}".replace('0', playlistId);
+//                 console.log("Success URL: ", successUrl); // Debug: Output the URL to console
+//                 $('#successPlaylistButton').attr("onclick", "window.location.href='" + successUrl + "'");
+//             },
+//             error: function() {
+//                 $('#modalTambahPlaylist').modal('hide');
+//                 $('#modalError').modal('show');
+//                 // Set the onclick attribute for the error modal
+//                 var errorUrl = "{% url 'kelola_playlist:playlist_detail' 0 %}".replace('0', playlistId);
+//                 console.log("Error URL: ", errorUrl); // Debug: Output the URL to console
+//                 $('#errorPlaylistButton').attr("onclick", "window.location.href='" + errorUrl + "'");
+//             }
+//         });
+//     });
+// });
+
+$('#addSongToPlaylistForm').submit(function(e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    var playlistId = $('#validationCustom04').val(); // Get the selected playlist ID
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'play_song:add_song_to_playlist' %}",
+        data: formData,
+        dataType: 'json',  // Expecting a JSON response
+        success: function(response) {
+            $('#modalTambahPlaylist').modal('hide');
+            if (response.status === 'success') {
+                $('#modalSuccess').modal('show');
+                // Update the button link dynamically to redirect to the playlist detail page
+                var successUrl = "{% url 'kelola_playlist:playlist_detail' 0 %}".replace('0', playlistId);
+                console.log("Success URL: ", successUrl); // Debug: Output the URL to console
+                $('#successPlaylistButton').attr("onclick", "window.location.href='" + successUrl + "'");
+            }
+        },
+        error: function(response) {
+            $('#modalTambahPlaylist').modal('hide');
+            $('#modalError').modal('show');
+            var errorUrl = "{% url 'kelola_playlist:playlist_detail' 0 %}".replace('0', playlistId);
+                console.log("Error URL: ", errorUrl); // Debug: Output the URL to console
+                $('#errorPlaylistButton').attr("onclick", "window.location.href='" + errorUrl + "'");
+        }
+    });
+});
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+{% endblock %}

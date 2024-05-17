@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body{
+      font-family: 'Poppins', sans-serif;
+      background-color: black;
+      color: white;
+  }
+  #title{
+      margin-top:20px;
+      text-align: center;
+      font-weight: 1000;
+      color:#F5743B;
+  }
+  #tambah-playlist{
+      text-align: center;
+  }
+  #outer-container{
+      padding: 0 20vw 0 20vw;
+  }
+  .isian-playlist{
+      text-align: start;
+      padding: 10px;
+  }
+
+  #header-list-playlist div {
+      text-align: center;
+      
+  }
+
+  .grid-container{
+      display: grid;
+      grid-template-columns: 4fr 2fr 2fr 2fr;
+  }
+  #list-song div{
+      text-align: center;
+  }
+  #list-song{
+      padding: 0px 40px 0px 40px;
+      margin-bottom: 30px;
+  }
+  .row{
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: 1px solid white;
+  }
+  #navbar-header{
+    background-color: #57504D;
+  }
+  .btn {
+    border-color: #F5743B;
+    background-color: #F5743B;
+  }
+</style>
+
+<div class="container-fluid" id="outer-container">
+  <div class="container-fluid" id="title">
+      <h1>USER PLAYLIST</h1>
+  </div>
+
+  <div class="container-fluid" id="daftar-lagu">
+      <nav id="navbar-header" class="navbar px-3 mb-3">
+          <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+          <div class="container-fluid" id="header-list-playlist">
+              <div class="col-4">Judul</div>
+              <div class="col-2">Jumlah Lagu</div>
+              <div class="col-2">Total Durasi</div>
+              <div class="col-4">Action</div>
+          </div>
+      </nav>
+      {% for row in playlist %}
+      <div id="list-song" class="container-fluid">
+          <div class="row align-items-start">
+              <div class="col-4">
+                  {{ row.judul }}
+              </div>
+              <div class="col-2">
+                {{ row.jumlah_lagu }}
+              </div>
+              <div class="col-2">
+                {{ row.total_durasi }}
+              </div>
+              <div class="col-4">
+                  <div class="container-fluid">
+                      <a href="{% url 'kelola_playlist:playlist_detail' row.id_playlist %}" class="btn btn-primary">Detail</a>
+                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePlaylistModal-{{ row.id_playlist }}">Ubah</button>
+                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deletePlaylistModal-{{ row.id_playlist }}">Hapus</button>
+                  </div>
+                </div>
+              </div>
+      </div>
+
+      <!-- Modal Delete Playlist Confirm -->
+    <div class="modal fade" id="deletePlaylistModal-{{ row.id_playlist }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="POST" action="{% url 'kelola_playlist:delete_playlist' %}">
+                {% csrf_token %}
+                <input type="hidden" name="playlist_id" value="{{ row.id_playlist }}">  <!-- Hidden input to pass playlist ID -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="color: black;">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="color: black;">
+                        Are you sure you want to delete this playlist?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Update Playlist Modal -->
+    <div class="modal fade" id="updatePlaylistModal-{{ row.id_playlist }}" tabindex="-1" role="dialog" aria-labelledby="updatePlaylistLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="POST" action="{% url 'kelola_playlist:update_playlist' %}">
+                {% csrf_token %}
+                <input type="hidden" name="playlist_id" value="{{ row.id_playlist }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updatePlaylistLabel" style="color: black;">Update Playlist</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title-{{ row.id_playlist }}" style="color: black">Title:</label>
+                            <input type="text" class="form-control" id="title-{{ row.id_playlist }}" name="title" value="{{ row.title }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description-{{ row.id_playlist }}" style="color: black;">Description:</label>
+                            <textarea class="form-control" id="description-{{ row.id_playlist }}" name="description" required>{{ row.description }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+      {% endfor %}
+  </div>
+
+  <div class="container-fluid" id="tambah-playlist">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-tambah-playlist">Tambah Playlist</button>
+  </div>
+
+  
+
+  <!-- Modal untuk menambahkan playlist -->
+  <div class="modal fade" id="modal-tambah-playlist" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Tambah Playlist</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row isian-playlist">
+                        <div class="col-4"id="text-judul" style="color: black;">Judul</div>
+                        <div class="col-8"><input name="judul" type="text" class="form-control" id="judul-playlist" placeholder="Judul Playlist"></div>
+                    </div>
+                    <div class="row isian-playlist">
+                        <div class="col-4" style="color: black;">Deskripsi</div>
+                        <div class="col-8"><input name="deskripsi" type="text" class="form-control" id="deskripsi-playlist" placeholder="Deskripsi Playlist"></div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" name="submit" value="create_new_playlist" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>\
+{% endblock content %}

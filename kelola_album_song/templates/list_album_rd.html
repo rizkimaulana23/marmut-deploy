@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>List Album</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #57504D 0%, #171715 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #F5743B;
+        }
+        a {
+            color: #F5743B;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>LIST ALBUM</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Jumlah Lagu</th>
+                <th>Total Durasi</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+            <tr>
+                <td>{{ album.judul }}</td>
+                <td class="center">{{ album.jumlah_lagu }}</td>
+                <td class="center">{{ album.total_durasi }} menit</td>
+                <td>
+                    <a href="{% url 'kelola_album_song:list_songs_in_album' album.id %}">[Lihat Daftar Lagu]</a>
+                    <a href="{% url 'kelola_album_song:delete_album' album.id %}">[Hapus]</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock content%}

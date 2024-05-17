@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Label</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            width: 100%;
+            height: auto; /* Allow body to expand as needed */
+            position: relative; /* Basic positioning */
+            background: linear-gradient(180deg, #57504D 0%, #171715 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            padding: 50px 0; /* Padding to avoid touching the viewport edges */
+            display: flex;
+            justify-content: center; /* Center the form horizontally */
+        }
+        .form-container {
+            width: 90%; /* Or fixed width like 600px */
+            max-width: 600px; /* Maximum width */
+            margin: auto; /* Centering vertically if within another flex container */
+            padding: 20px; /* Padding inside the container */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: adds shadow for better focus */
+            border-radius: 8px; /* Optional: rounds corners */
+        }
+        .input-group {
+            margin-bottom: 20px; /* Space between input groups */
+        }
+        .input-box {
+            padding: 10px 14px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #D0D5DD;
+            display: flex;
+            align-items: center;
+        }
+        input[type="text"], input[type="password"] {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            padding: 0;
+            color: #667085;
+            font-size: 16px;
+        }
+        button {
+            width: 100%; /* Full width of the container */
+            height: 50px;
+            background: #F5743B;
+            border-radius: 12px;
+            color: #FAFAFA;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            display: block; /* Make it a block element */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 style="color: white; text-align: center;">Register Label</h1>
+        <form action="{% url 'register:register_label' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>Email</label>
+                <div class="input-box">
+                    <input type="text" name="email" placeholder="Enter your email here">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="Enter your password here">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Nama</label>
+                <div class="input-box">
+                    <input type="text" name="nama" placeholder="Enter your name">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Kontak</label>
+                <div class="input-box">
+                    <input type="text" name="kontak" placeholder="Enter your contact">
+                </div>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock content%}

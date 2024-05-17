@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Choice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            width: 100%; height: 100%; position: fixed;
+            top: 0; left: 0;
+            background: linear-gradient(180deg, #57504D 0%, #171715 100%);
+            overflow-y: scroll;
+            font-family: 'Poppins', sans-serif;
+        }
+        .button {
+            width: 451px; height: 55px;
+            position: absolute; left: 430px;
+            display: flex;
+            border: none; background: none;
+        }
+        .button div {
+            flex: 1;
+            padding: 12px 32px;
+            background: #F5743B; border-radius: 12px;
+            justify-content: center; align-items: center;
+            display: flex;
+            color: #FAFAFA; font-size: 20px;
+            font-weight: 700; line-height: 24px;
+        }
+        .button:hover div {
+            background: #D45A2C;
+        }
+        .link {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function goToPage(url) {
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div style="left: 570px; top: 180px; position: absolute; text-align: center; font-size: 32px; line-height: 38.40px;">Register</div>
+
+    <button class="button" style="top: 250px;" onclick="goToPage('{% url 'register:register_user' %}')">
+        <div>Pengguna</div>
+    </button>
+    
+    <button class="button" style="top: 320px;" onclick="goToPage('{% url 'register:register_label' %}')">
+        <div>Label</div>
+    </button>
+
+</body>
+</html>
+{% endblock content%}

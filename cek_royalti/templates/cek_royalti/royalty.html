@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Royalties</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #57504D;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white; /* Set the title color to white */
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 20px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensure rounded corners are visible */
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #F5743B;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>LIST ROYALTI</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Judul Lagu</th>
+                <th>Judul Album</th>
+                <th>Total Play</th>
+                <th>Total Download</th>
+                <th>Total Royalti Didapat</th>
+                <th>Rate Royalti</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in songs %}
+            <tr>
+                <td>{{ song.title }}</td>
+                <td>{{ song.album_title }}</td>
+                <td class="center">{{ song.plays }}</td>
+                <td class="center">{{ song.downloads }}</td>
+                <td>{{ song.total_royalty }}</td>
+                <td>{{ song.royalty_rate }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock content %}
